@@ -1,11 +1,20 @@
 import mongoose from "mongoose"
 import Workout from "../models/workout.js"
-import host from '../host.js'
+// import host from '../host.js'
 
 // mongoose.connect("mongodb://localhost/workout", {
 //   useNewUrlParser: true,
 //   useFindAndModify: false
 // });
+
+mongoose.connect("mongodb://localhost/workout", {
+  useNewUrlParser: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true
+});
+
+const host = mongoose.connection
+host.on('error', console.error.bind(console, 'mongo connection error'))
 
 let workoutSeed = [
   {

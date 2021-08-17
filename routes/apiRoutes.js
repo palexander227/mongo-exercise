@@ -1,13 +1,10 @@
-import express from 'express'
-import mongoose from 'mongoose'
+import express from 'express';
+import { createWorkout, getLastWorkout } from "../controllers/dbController.js"
 
+const app = express();
+app.use(express.json())
 
+app.get('/workouts', getLastWorkout)
+app.post('/workouts', createWorkout)
 
-
-const router = express.Router()
-
-router.get('/workouts', (req, res) => {
-    console.log('get workouts')
-})
-
-export default router
+export default app;
