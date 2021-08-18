@@ -16,3 +16,12 @@ export const getLastWorkout = (req, res) => {
         res.json(data)
     })
 }
+
+export const continueWorkout = (req, res) => {
+    const {id} = req.params;
+    const workoutDetails = req.body;
+    Workout.findByIdAndUpdate({_id: id}, {$push: {exercises: workoutDetails}}, {new: true}, (err, data) => {
+        if(err) res.json(err)
+        res.json({success: true, data})
+    })
+}

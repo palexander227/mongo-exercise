@@ -20,10 +20,10 @@ let shouldNavigateAway = false;
 async function initExercise() {
   let workout;
 
-  if (location.search.split("=")[1] === undefined) {
-    workout = await API.createWorkout()
-    console.log(workout)
-  }
+  //if (location.search.split("=")[1] === undefined) {
+   // workout = await API.createWorkout()
+   // console.log(workout)
+  //}
   if (workout) {
     location.search = "?id=" + workout._id;
   }
@@ -115,6 +115,37 @@ async function handleFormSubmit(event) {
   }
 
   await API.addExercise(workoutData);
+
+  clearInputs();
+  toast.classList.add("success");
+}
+
+//new code addition
+async function handleNewWorkout(event) {
+  event.preventDefault();
+
+  let workoutData = {};
+
+  if (workoutType === "cardio") {
+    workoutData.type = "cardio";
+    workoutData.name = cardioNameInput.value.trim();
+    workoutData.distance = Number(distanceInput.value.trim());
+    workoutData.duration = Number(durationInput.value.trim());
+  } else if (workoutType === "resistance") {
+    workoutData.type = "resistance";
+    workoutData.name = nameInput.value.trim();
+    workoutData.weight = Number(weightInput.value.trim());
+    workoutData.sets = Number(setsInput.value.trim());
+    workoutData.reps = Number(repsInput.value.trim());
+    workoutData.duration = Number(resistanceDurationInput.value.trim());
+  }
+
+  const fullWorkoutData = {
+    totalDuration: "50",
+    exercises: [workoutData]
+  }
+
+  await API.createWorkout(fullWorkoutData)
   clearInputs();
   toast.classList.add("success");
 }
@@ -143,11 +174,25 @@ if (workoutTypeSelect) {
 if (completeButton) {
   completeButton.addEventListener("click", function (event) {
     shouldNavigateAway = true;
-    handleFormSubmit(event);
+
+    //new code addition
+    if(location.search.split("=")[0] === ""){
+      handleNewWorkout(event)
+    }else{
+      handleFormSubmit(event);
+    }
   });
 }
 if (addButton) {
-  addButton.addEventListener("click", handleFormSubmit);
+  addButton.addEventListener("click", function(event){
+
+    //new code addition
+    if(location.search.split("=")[0] === ""){
+      handleNewWorkout(event)
+    }else{
+      handleFormSubmit(event);
+    }
+  });
 }
 toast.addEventListener("animationend", handleToastAnimationEnd);
 
