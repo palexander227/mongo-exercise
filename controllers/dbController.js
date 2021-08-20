@@ -9,7 +9,7 @@ export const createWorkout = (req, res) => {
   });
 };
 
-export const getLastWorkout = (req, res) => {
+export const getWorkout = (req, res) => {
   Workout.aggregate(
     [
       {
@@ -22,7 +22,7 @@ export const getLastWorkout = (req, res) => {
       if (err) res.json(err);
       res.json(data);
     }
-  );
+  )
 };
 
 export const continueWorkout = (req, res) => {
