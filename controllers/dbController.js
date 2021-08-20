@@ -9,6 +9,8 @@ export const createWorkout = (req, res) => {
   });
 };
 
+
+//this route works for getting both recent workout and stats for all workouts(weight and totalDuration for seven days)
 export const getWorkout = (req, res) => {
   Workout.aggregate(
     [
