@@ -2,9 +2,12 @@ import express from 'express'
 import mongoose from "mongoose"
 import apiRoutes from './routes/apiRoutes.js'
 import path from 'path'
+import dotenv from "dotenv"
+
+dotenv.config();
 
 mongoose
-  .connect("mongodb://localhost/workout", {
+  .connect(process.env.DATABASE_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
@@ -18,8 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.json())
 app.use('/api', apiRoutes);
 
-// This may be a duplicate of line 16.
-// Every file in the public folder is available on the matching path because we are using static middleware, right?
+//html routes
 app.get("/exercise", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "exercise.html"))
 })
