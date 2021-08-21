@@ -21,7 +21,37 @@ function generatePalette() {
   return arr;
 }
 
+function getWorkoutNames2(data) {
+  const workoutNames = [];
+  for (let i = 0; i < data.length; i++) {
+    for (let j = 0; j < data[i].exercises.length; j++) {
+       if (!workoutNames.includes(data[i].exercises[j].name)) {
+             workoutNames.push(data[i].exercises[j].name);
+       }
+    }
+  }
+  return workoutNames;
+}
+
+function getWorkoutDuration2(data, names) {
+  const durations = new Array(names.length).fill(0);
+  for (let i = 0; i < data.length; i++) {
+    for (let j = 0; j < data[i].exercises.length; j++) {
+       const index = names.indexOf(data[i].exercises[j].name);
+       if (index >= 0) {
+        durations[index] += data[i].exercises[j].duration;
+       }
+    }
+  }
+  return durations;
+}
+
 function populateChart(data) {
+  const workoutNames2 = getWorkoutNames2(data);
+  const workoutDurations2 = getWorkoutDuration2(data, workoutNames2);
+  const workoutGroup = [workoutNames2, workoutDurations2];
+
+
   let durations = data.map(({ totalDuration }) => totalDuration);
   let pounds = calculateTotalWeight(data);
   let workouts = workoutNames(data);
@@ -135,12 +165,12 @@ function populateChart(data) {
   let pieChart = new Chart(pie, {
     type: 'pie',
     data: {
-      labels: workouts,
+      labels: workoutGroup[0],
       datasets: [
         {
           label: 'Exercises Performed',
           backgroundColor: colors,
-          data: durations,
+          data: workoutGroup[1],
         },
       ],
     },
